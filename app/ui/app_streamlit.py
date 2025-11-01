@@ -55,95 +55,213 @@ st.markdown("""
 st.markdown(
     f"""
     <style>
-      :root {{
-        --primary: {COLORS['primary']};
-        --text: {COLORS['secondary']};
-        --muted: {COLORS['text_muted']};
-        --accent: {COLORS['accent']};
-        --border: {COLORS['border']};
-        --success: {COLORS['success']};
-        --warning: {COLORS['warning']};
-        --danger: {COLORS['danger']};
+    /* =============================
+       LEXIGUARD EXECUTIVE UI V2.1
+       ============================= */
+
+    :root {{
+      --bg-dark: #0A0E18;
+      --bg-surface: #101726;
+      --bg-elevated: rgba(255,255,255,0.04);
+      --text-main: #EAECEF;
+      --text-muted: #9BA3B1;
+      --accent: #C9A86A;
+      --accent-light: #E7C78F;
+      --border: #1D2B40;
+      --success: #42D17D;
+      --warning: #E5B750;
+      --danger: #FF5555;
+      --shadow-copper: 0 0 24px rgba(201,168,106,0.25);
+      --shadow-deep: 0 8px 28px rgba(0,0,0,0.6);
+    }}
+
+    html, body, .stApp {{
+      background: radial-gradient(circle at 10% 20%, #0C1320 0%, #070B12 100%) !important;
+      color: var(--text-main);
+      font-family: "Inter", "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }}
+
+    .main .block-container {{
+      max-width: 1200px;
+      padding-top: 1rem;
+      padding-bottom: 2.5rem;
+    }}
+
+    /* ─── Sidebar ─────────────────────────────── */
+    [data-testid="stSidebar"] {{
+      background: linear-gradient(180deg, rgba(16,24,40,0.85), rgba(12,18,32,0.85));
+      backdrop-filter: blur(22px);
+      border-right: 1px solid var(--border);
+      box-shadow: inset -1px 0 0 rgba(255,255,255,0.03);
+      color: var(--text-main);
+    }}
+    [data-testid="stSidebar"] h1, 
+    [data-testid="stSidebar"] h2, 
+    [data-testid="stSidebar"] h3 {{
+      font-weight: 600 !important;
+      color: var(--text-main) !important;
+    }}
+    [data-testid="stSidebar"] label {{
+      font-weight: 500 !important;
+      color: var(--text-muted) !important;
+      letter-spacing: 0.2px;
+    }}
+
+    .stTextInput input, 
+    .stDateInput input, 
+    .stSelectbox div[data-baseweb="select"] > div {{
+      background: var(--bg-elevated) !important;
+      border: 1px solid var(--border);
+      border-radius: 10px !important;
+      color: var(--text-main);
+      padding: 10px 12px !important;
+      transition: all 0.2s ease;
+    }}
+    .stTextInput input:focus, 
+    .stDateInput input:focus, 
+    .stSelectbox div[role="combobox"]:focus-within {{
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(201,168,106,0.15);
+    }}
+
+    /* ─── Buttons ─────────────────────────────── */
+    .stButton button {{
+      background: linear-gradient(140deg, var(--accent), var(--accent-light));
+      border: none;
+      border-radius: 12px !important;
+      color: #0A0E18 !important;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      padding: 12px 16px !important;
+      box-shadow: 0 10px 30px rgba(201,168,106,0.28);
+      transition: all 0.18s ease;
+    }}
+    .stButton button:hover {{
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(201,168,106,0.4);
+    }}
+    .stButton button:active {{
+      transform: translateY(1px);
+      filter: brightness(0.95);
+    }}
+
+    /* ─── Headings & Dividers ─────────────────── */
+    h1, h2, h3 {{
+      color: var(--text-main);
+      letter-spacing: .3px;
+    }}
+    h1 {{
+      font-weight: 800;
+      font-size: 2rem !important;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 18px rgba(201,168,106,0.15);
+    }}
+    h2 {{
+      font-weight: 700;
+      font-size: 1.3rem !important;
+      border-left: 3px solid var(--accent);
+      padding-left: 8px;
+      margin-bottom: .8rem;
+    }}
+    h3 {{
+      font-weight: 600;
+      color: var(--accent-light);
+      margin-bottom: .4rem;
+    }}
+    hr {{
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      border: none;
+      margin: 1rem 0;
+    }}
+
+    /* ─── Results Panels ─────────────────────── */
+    .risk-card {{
+      background: var(--bg-elevated);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-deep);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      transition: all 0.3s ease;
+    }}
+    .risk-card:hover {{
+      border-color: var(--accent);
+      box-shadow: var(--shadow-copper);
+    }}
+
+    .risk-high {{ color: var(--danger); font-weight: 700; }}
+    .risk-medium {{ color: var(--warning); font-weight: 700; }}
+    .risk-low {{ color: var(--success); font-weight: 700; }}
+
+    /* ─── Metrics Layout ─────────────────────── */
+    [data-testid="stMetric"] {{
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+      padding: 14px;
+      transition: all 0.2s ease;
+    }}
+    [data-testid="stMetric"]:hover {{
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }}
+
+    /* ─── DataFrames and Charts ─────────────── */
+    .element-container:has(canvas),
+    .stPlotlyChart, .stAltairChart, .stDataFrame {{
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px;
+      box-shadow: 0 8px 26px rgba(0,0,0,0.45);
+    }}
+    .stDataFrame thead th {{
+      background: #0E1624 !important;
+      font-weight: 600;
+      color: var(--text-main);
+      border-bottom: 1px solid var(--border);
+    }}
+    .stDataFrame tbody tr:hover {{
+      background: rgba(201,168,106,0.07);
+    }}
+
+    /* ─── Footer ─────────────────────────────── */
+    .footer {{
+      text-align: center;
+      color: var(--accent-light);
+      font-size: 13px;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }}
+
+    /* ─── Scrollbar ─────────────────────────── */
+    ::-webkit-scrollbar {{ width: 10px; }}
+    ::-webkit-scrollbar-thumb {{
+      background: linear-gradient(180deg, #1C2940, #16253A);
+      border-radius: 10px;
+      border: 1px solid #22334F;
+    }}
+
+    </style>
+
+    <!-- Optional: Animated accent pulse -->
+    <div style="
+      position:fixed;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent,var(--accent),transparent);
+      opacity:.5;animation:pulse 3s infinite ease-in-out;">
+    </div>
+    <style>
+      @keyframes pulse {{
+        0%,100% {{ opacity:.15; }}
+        50% {{ opacity:.55; }}
       }}
-      * {{ box-sizing: border-box; }}
-      html, body, .stApp, .main {{
-        background: var(--primary) !important;
-        color: var(--text) !important;
-        font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      }}
-      [data-testid="stSidebar"] {{
-        background: var(--primary) !important;
-        border-right: 1px solid var(--border);
-      }}
-      [data-testid="stSidebar"] h3, [data-testid="stSidebar"] label {{
-        color: var(--text) !important;
-        font-weight: 600;
-      }}
-      .stTextInput input, .stDateInput input, .stSelectbox div[data-baseweb="select"] > div {{
-        background: rgba(255,255,255,0.03) !important;
-        border: 1px solid var(--border) !important;
-        color: var(--text) !important;
-        border-radius: 10px !important;
-        padding: 10px 12px !important;
-        transition: border .2s ease, box-shadow .2s ease;
-      }}
-      .stTextInput input:focus, .stDateInput input:focus, .stSelectbox div[role="combobox"]:focus-within {{
-        border-color: var(--accent) !important;
-        box-shadow: 0 0 0 3px rgba(189,148,104,0.20) !important;
-      }}
-      .stButton button {{
-        background: linear-gradient(180deg, var(--accent), #a3784d);
-        color: #0b0f18 !important;
-        border: none !important;
-        border-radius: 12px !important;
-        font-weight: 700 !important;
-        letter-spacing: .2px;
-        padding: 10px 14px !important;
-        box-shadow: 0 8px 24px rgba(189,148,104,0.18);
-        transition: transform .06s ease, filter .2s ease, box-shadow .2s ease;
-      }}
-      .stButton button:hover {{ filter: brightness(1.04); }}
-      .stButton button:active {{ transform: translateY(1px); box-shadow: 0 4px 14px rgba(189,148,104,0.18); }}
-      h1, h2, h3, h4 {{ color: var(--text) !important; letter-spacing: .2px; }}
-      h1 {{ font-weight: 700; }} h2, h3 {{ font-weight: 600; }}
-      div[data-testid="stMetric"] {{
-        background: rgba(255,255,255,0.03);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 14px 16px;
-      }}
-      .stDataFrame, .stDataFrame div, .stDataFrame table {{
-        color: var(--text) !important;
-        font-variant-numeric: tabular-nums;
-        font-feature-settings: "tnum" on, "ss01" on;
-      }}
-      .stDataFrame thead th {{
-        position: sticky; top: 0;
-        background: #0F172A !important;
-        color: var(--text) !important;
-        border-bottom: 1px solid var(--border) !important;
-        font-weight: 600;
-      }}
-      .stDataFrame tbody tr {{ background: rgba(255,255,255,0.015); border-bottom: 1px solid var(--border); }}
-      .stDataFrame tbody tr:hover {{ background: rgba(189,148,104,0.08); }}
-      .element-container:has(canvas), .stPlotlyChart, .stAltairChart {{
-        background: rgba(255,255,255,0.03);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 10px;
-      }}
-      .footer {{
-        text-align: center;
-        color: var(--accent);
-        font-size: 12px;
-        margin-top: 40px;
-        padding-top: 20px;
-        border-top: 1px solid var(--border);
-      }}
-      .risk-high {{ color: var(--danger) !important; font-weight: 700; }}
-      .risk-medium {{ color: var(--warning) !important; font-weight: 700; }}
-      .risk-low {{ color: var(--success) !important; font-weight: 700; }}
-      svg text {{ font-family: 'IBM Plex Mono', monospace; letter-spacing: .5px; }}
     </style>
     """,
     unsafe_allow_html=True,
