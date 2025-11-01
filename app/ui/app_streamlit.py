@@ -15,6 +15,27 @@ from app.media.rss import MediaIngester
 from app.risk.scorer import RiskScorer
 from app.audit.logger import AuditLogger
 from app.config import DB_PATH
+import json, datetime as dt, re, os
+# ---- service singletons (shared across the app) ----
+try:
+    ofac_loader = OFACLoader()
+except Exception:
+    ofac_loader = None
+
+try:
+    ingester = MediaIngester()
+except Exception:
+    ingester = None
+
+try:
+    scorer = RiskScorer()
+except Exception:
+    scorer = None
+
+try:
+    auditor = AuditLogger()
+except Exception:
+    auditor = None
 
 # ── MUST be the first Streamlit command and called only once ───────────
 st.set_page_config(
@@ -367,19 +388,71 @@ def main():
 
     if run:
         result = perform_screening(name, dob, country)
+    # remember for export
+        st.session_state["last_result"] = result
+        st.session_state["last_query"] = {
+        "subject_name": name,
+        "dob": dob,
+        "country": country
+        }
         render_results(result)
 
+
     if export:
-        try:
-            data = auditor.export_audit_log("json")
-            st.download_button(
-                label="Download Audit Log (JSON)",
-                data=data,
-                file_name=f"lexiguard_audit_{datetime.utcnow().isoformat()}.json",
-                mime="application/json",
-            )
-        except Exception as e:
-            st.error(f"Audit export failed: {e}")
+        res = st.session_state.get("last_result")
+        meta = st.session_state.get("last_query", {})
+
+        if not res:
+            st.warning("Run a screening first, then export.")
+        else:
+            try:
+                os.makedirs("exports", exist_ok=True)
+
+                subject_name = meta.get("subject_name") or ""
+                dob = meta.get("dob") or ""
+                country = meta.get("country") or "Any"
+
+                total_score = res["risk_data"]["composite_score"]
+                sanctions_score = res["risk_data"]["breakdown"]["sanctions"]["score"]
+                media_score = res["risk_data"]["breakdown"]["media"]["score"]
+                pep_score = res["risk_data"]["breakdown"]["pep"]["score"]
+                matches = res.get("sanctions_matches", [])
+                media_hits = res.get("media_results", [])
+
+                ofac_date_str = datetime.utcnow().strftime("%Y-%m-%d")
+                safe_name = re.sub(r"[^A-Za-z0-9_-]+", "_", (subject_name or "subject"))
+                ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+
+                report = {
+                    "subject": subject_name,
+                    "dob": dob,
+                    "country": country,
+                    "score": total_score,
+                    "components": {
+                        "sanctions": sanctions_score,
+                        "pep": pep_score,
+                        "media": media_score
+                    },
+                    "sanctions_matches": matches,
+                    "media_hits": media_hits,
+                    "generated_at": datetime.utcnow().isoformat(),
+                    "ofac_snapshot_date": ofac_date_str,
+                }
+
+                path = f"exports/audit_{safe_name}_{ts}.json"
+                with open(path, "w") as f:
+                    json.dump(report, f, indent=2, default=str)
+
+                st.success(f"Audit exported: {path}")
+                st.download_button(
+                    label="Download Audit Report (JSON)",
+                    data=json.dumps(report, indent=2),
+                    file_name=f"audit_{safe_name}_{ts}.json",
+                    mime="application/json",
+                )
+            except Exception as e:
+                st.error(f"Audit export failed: {e}")
+
 
     render_footer()
 
