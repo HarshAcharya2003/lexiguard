@@ -52,220 +52,347 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Institutional CSS theme (visual only)
-st.markdown(
-    f"""
-    <style>
-    /* =============================
-       LEXIGUARD EXECUTIVE UI V2.1
-       ============================= */
+st.markdown("""
+<style>
+:root {
+  --bg: {COLORS['primary']};
+  --surface: {COLORS['secondary']};
+  --accent: {COLORS['accent']};
+  --muted: {COLORS['text_muted']};
+  --border: {COLORS['border']};
+  --success: {COLORS['success']};
+  --warning: {COLORS['warning']};
+  --danger: {COLORS['danger']};
 
-    :root {{
-      --bg-dark: #0A0E18;
-      --bg-surface: #101726;
-      --bg-elevated: rgba(255,255,255,0.04);
-      --text-main: #EAECEF;
-      --text-muted: #9BA3B1;
-      --accent: #C9A86A;
-      --accent-light: #E7C78F;
-      --border: #1D2B40;
-      --success: #42D17D;
-      --warning: #E5B750;
-      --danger: #FF5555;
-      --shadow-copper: 0 0 24px rgba(201,168,106,0.25);
-      --shadow-deep: 0 8px 28px rgba(0,0,0,0.6);
-    }}
+  --accent-strong: color-mix(in srgb, var(--accent) 72%, black 8%);
+  --glass: rgba(255,255,255,0.03);
+  --glass-2: rgba(255,255,255,0.025);
+  --focus-alpha: 0.18;
 
-    html, body, .stApp {{
-      background: radial-gradient(circle at 10% 20%, #0C1320 0%, #070B12 100%) !important;
-      color: var(--text-main);
-      font-family: "Inter", "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }}
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --radius-pill: 999px;
 
-    .main .block-container {{
-      max-width: 1200px;
-      padding-top: 1rem;
-      padding-bottom: 2.5rem;
-    }}
+  --transition-fast: 180ms cubic-bezier(.2,.8,.2,1);
+}
 
-    /* ─── Sidebar ─────────────────────────────── */
-    [data-testid="stSidebar"] {{
-      background: linear-gradient(180deg, rgba(16,24,40,0.85), rgba(12,18,32,0.85));
-      backdrop-filter: blur(22px);
-      border-right: 1px solid var(--border);
-      box-shadow: inset -1px 0 0 rgba(255,255,255,0.03);
-      color: var(--text-main);
-    }}
-    [data-testid="stSidebar"] h1, 
-    [data-testid="stSidebar"] h2, 
-    [data-testid="stSidebar"] h3 {{
-      font-weight: 600 !important;
-      color: var(--text-main) !important;
-    }}
-    [data-testid="stSidebar"] label {{
-      font-weight: 500 !important;
-      color: var(--text-muted) !important;
-      letter-spacing: 0.2px;
-    }}
+/* Global reset & typography */
+html, body, .stApp {
+  background: linear-gradient(180deg, var(--bg) 0%, rgba(0,0,0,0.7) 100%) !important;
+  color: var(--surface);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.48;
+  font-size: 15px;
+}
 
-    .stTextInput input, 
-    .stDateInput input, 
-    .stSelectbox div[data-baseweb="select"] > div {{
-      background: var(--bg-elevated) !important;
-      border: 1px solid var(--border);
-      border-radius: 10px !important;
-      color: var(--text-main);
-      padding: 10px 12px !important;
-      transition: all 0.2s ease;
-    }}
-    .stTextInput input:focus, 
-    .stDateInput input:focus, 
-    .stSelectbox div[role="combobox"]:focus-within {{
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(201,168,106,0.15);
-    }}
+/* Main container sizing */
+.main .block-container {
+  max-width: 1280px;
+  padding: 20px 28px 36px;
+}
 
-    /* ─── Buttons ─────────────────────────────── */
-    .stButton button {{
-      background: linear-gradient(140deg, var(--accent), var(--accent-light));
-      border: none;
-      border-radius: 12px !important;
-      color: #0A0E18 !important;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      padding: 12px 16px !important;
-      box-shadow: 0 10px 30px rgba(201,168,106,0.28);
-      transition: all 0.18s ease;
-    }}
-    .stButton button:hover {{
-      transform: translateY(-2px);
-      box-shadow: 0 14px 36px rgba(201,168,106,0.4);
-    }}
-    .stButton button:active {{
-      transform: translateY(1px);
-      filter: brightness(0.95);
-    }}
+/* ================= Sidebar: frosted, fixed, premium ================= */
+[data-testid="stSidebar"] {
+  background: linear-gradient(180deg, rgba(6,10,18,0.74), rgba(10,14,22,0.68));
+  backdrop-filter: blur(16px) saturate(110%);
+  -webkit-backdrop-filter: blur(16px) saturate(110%);
+  border-right: 1px solid rgba(255,255,255,0.03);
+  box-shadow: inset -1px 0 0 rgba(255,255,255,0.02);
+  padding: 20px 18px !important;
+  min-width: 300px;
+  color: var(--surface);
+}
+[data-testid="stSidebar"] .css-1d391kg, 
+[data-testid="stSidebar"] .block-container {
+  padding-left: 0;
+  padding-right: 0;
+}
 
-    /* ─── Headings & Dividers ─────────────────── */
-    h1, h2, h3 {{
-      color: var(--text-main);
-      letter-spacing: .3px;
-    }}
-    h1 {{
-      font-weight: 800;
-      font-size: 2rem !important;
-      background: linear-gradient(90deg, var(--accent), var(--accent-light));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 18px rgba(201,168,106,0.15);
-    }}
-    h2 {{
-      font-weight: 700;
-      font-size: 1.3rem !important;
-      border-left: 3px solid var(--accent);
-      padding-left: 8px;
-      margin-bottom: .8rem;
-    }}
-    h3 {{
-      font-weight: 600;
-      color: var(--accent-light);
-      margin-bottom: .4rem;
-    }}
-    hr {{
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      border: none;
-      margin: 1rem 0;
-    }}
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3 {
+  color: var(--surface) !important;
+  font-family: "Inter", system-ui;
+  letter-spacing: 0.2px;
+  margin-bottom: 8px;
+}
+[data-testid="stSidebar"] h2 { font-size: 1.05rem; font-weight: 700; }
+[data-testid="stSidebar"] label, [data-testid="stSidebar"] .css-1kb1vgj {
+  color: var(--muted) !important;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
 
-    /* ─── Results Panels ─────────────────────── */
-    .risk-card {{
-      background: var(--bg-elevated);
-      border-radius: 18px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-deep);
-      padding: 20px 24px;
-      margin-bottom: 24px;
-      transition: all 0.3s ease;
-    }}
-    .risk-card:hover {{
-      border-color: var(--accent);
-      box-shadow: var(--shadow-copper);
-    }}
+/* Inputs: premium, accessible, rounded */
+.stTextInput input,
+.stTextArea textarea,
+.stDateInput input,
+.stNumberInput input,
+.st-time-input input,
+.stSelectbox div[data-baseweb="select"] > div,
+.stMultiSelect div[data-baseweb="select"] > div {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid var(--border) !important;
+  color: var(--surface) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 10px 12px !important;
+  min-height: 44px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
+  outline: none !important;
+  font-size: 14px;
+}
+.stTextInput input::placeholder,
+.stDateInput input::placeholder,
+.stTextArea textarea::placeholder {
+  color: rgba(255,255,255,0.18) !important;
+  opacity: 1;
+}
+.stTextInput input:focus,
+.stDateInput input:focus,
+.stTextArea textarea:focus,
+.stSelectbox div[role="combobox"]:focus-within {
+  border-color: var(--accent) !important;
+  box-shadow: 0 6px 26px rgba(0,0,0,0.5), 0 0 0 4px color-mix(in srgb, var(--accent) var(--focus-alpha), transparent);
+  transform: translateY(-1px);
+}
 
-    .risk-high {{ color: var(--danger); font-weight: 700; }}
-    .risk-medium {{ color: var(--warning); font-weight: 700; }}
-    .risk-low {{ color: var(--success); font-weight: 700; }}
+/* Larger hit area for inputs */
+.stTextInput, .stNumberInput, .stDateInput, .stSelectbox, .stTextArea {
+  padding: 4px 0;
+}
 
-    /* ─── Metrics Layout ─────────────────────── */
-    [data-testid="stMetric"] {{
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
-      padding: 14px;
-      transition: all 0.2s ease;
-    }}
-    [data-testid="stMetric"]:hover {{
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }}
+/* ================= Buttons: pill, gradient, hover glow ================= */
+.stButton>button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  background: linear-gradient(160deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #fff 8%));
+  border: none !important;
+  color: rgba(10,12,16,0.98) !important;
+  border-radius: var(--radius-pill) !important;
+  padding: 10px 16px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.55), 0 6px 18px color-mix(in srgb, var(--accent) 20%, transparent);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+  min-height: 44px;
+  cursor: pointer;
+}
+[data-testid="stSidebar"] .stButton>button {
+  padding: 14px 18px !important;
+  min-height: 52px;
+  font-size: 15px;
+}
+.stButton>button:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 18px 44px rgba(0,0,0,0.62), 0 0 30px rgba(0,0,0,0.12), 0 8px 28px color-mix(in srgb, var(--accent) 30%, transparent);
+  filter: saturate(1.05);
+}
+.stButton>button:active {
+  transform: translateY(1px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.6);
+  transform: translateY(1px) scale(0.998);
+}
+.stButton>button[title*="Download"], .stButton>button[title*="Export"], .stButton>button:has(svg[data-icon="download"]) {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  color: var(--surface) !important;
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+.stButton>button svg, .stButton>button img {
+  height: 18px;
+  width: 18px;
+  opacity: 0.98;
+}
 
-    /* ─── DataFrames and Charts ─────────────── */
-    .element-container:has(canvas),
-    .stPlotlyChart, .stAltairChart, .stDataFrame {{
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 10px;
-      box-shadow: 0 8px 26px rgba(0,0,0,0.45);
-    }}
-    .stDataFrame thead th {{
-      background: #0E1624 !important;
-      font-weight: 600;
-      color: var(--text-main);
-      border-bottom: 1px solid var(--border);
-    }}
-    .stDataFrame tbody tr:hover {{
-      background: rgba(201,168,106,0.07);
-    }}
+/* ================= Metrics: cardified, large numeric ================= */
+div[data-testid="stMetric"] {
+  background: linear-gradient(180deg, rgba(255,255,255,0.022), rgba(255,255,255,0.01));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.55);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  font-family: "IBM Plex Mono", "Inter", monospace;
+  color: var(--surface);
+}
+div[data-testid="stMetric"]:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 18px 48px rgba(0,0,0,0.6), 0 0 28px rgba(201,168,106,0.06);
+}
+div[data-testid="stMetric"] .css-1b3d0te, 
+div[data-testid="stMetric"] .stMetricValue {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+div[data-testid="stMetric"] .stMetricDelta, div[data-testid="stMetric"] .stMetricValue {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-size: 1.5rem;
+  color: var(--surface);
+  font-weight: 800;
+}
+div[data-testid="stMetric"] .stMetricDelta.positive { color: var(--success); }
+div[data-testid="stMetric"] .stMetricDelta.negative { color: var(--danger); }
 
-    /* ─── Footer ─────────────────────────────── */
-    .footer {{
-      text-align: center;
-      color: var(--accent-light);
-      font-size: 13px;
-      margin-top: 2rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
-    }}
+/* ================= DataFrame / Table polish ================= */
+.stDataFrame, .element-container .stDataFrame {
+  background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.01));
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 8px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.52);
+  overflow: auto;
+  font-size: 13px;
+}
+.stDataFrame table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: "IBM Plex Mono", monospace;
+}
+.stDataFrame thead th {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: linear-gradient(180deg, rgba(10,14,20,0.9), rgba(8,12,18,0.9));
+  color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 13px;
+}
+.stDataFrame tbody tr {
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.stDataFrame tbody tr:nth-child(odd) {
+  background: rgba(255,255,255,0.008);
+}
+.stDataFrame tbody tr:nth-child(even) {
+  background: rgba(255,255,255,0.006);
+}
+.stDataFrame tbody tr:hover {
+  background: linear-gradient(90deg, rgba(201,168,106,0.04), rgba(201,168,106,0.02));
+  transform: translateY(-1px);
+}
+.stDataFrame td, .stDataFrame th {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+  color: var(--surface);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.stDataFrame td, .stDataFrame th { white-space: nowrap; }
+.stDataFrame::-webkit-scrollbar, .element-container::-webkit-scrollbar {
+  height: 8px; width: 8px;
+}
+.stDataFrame::-webkit-scrollbar-thumb, .element-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(30,40,54,0.9), rgba(18,26,38,0.9));
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.02);
+}
 
-    /* ─── Scrollbar ─────────────────────────── */
-    ::-webkit-scrollbar {{ width: 10px; }}
-    ::-webkit-scrollbar-thumb {{
-      background: linear-gradient(180deg, #1C2940, #16253A);
-      border-radius: 10px;
-      border: 1px solid #22334F;
-    }}
+/* ================= Charts: chrome, mono labels, tooltip ================= */
+.element-container canvas, .element-container svg, .stPlotlyChart, .stAltairChart {
+  background: transparent !important;
+  border-radius: var(--radius-lg);
+  padding: 12px;
+}
+.element-container:has(canvas), .element-container:has(svg),
+.stPlotlyChart, .stAltairChart {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.56);
+}
+.element-container svg text,
+.stPlotlyChart text,
+.stAltairChart text {
+  font-family: "IBM Plex Mono", monospace !important;
+  fill: var(--surface) !important;
+  font-size: 12px;
+}
+.stPlotlyChart .hoverlayer, .stPlotlyChart .hovertext, .stPlotlyChart .tooltip {
+  background: linear-gradient(180deg, rgba(20,26,34,0.98), rgba(12,16,22,0.98)) !important;
+  color: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6) !important;
+  font-family: "IBM Plex Mono", monospace !important;
+  font-size: 12px !important;
+}
 
-    </style>
+/* ================= Badges / chips ================= */
+.chip, .badge, .stBadge, .stMarkdown b.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  color: var(--surface);
+  border: 1px solid rgba(255,255,255,0.03);
+  font-size: 12px;
+}
 
-    <!-- Optional: Animated accent pulse -->
-    <div style="
-      position:fixed;top:0;left:0;right:0;height:2px;
-      background:linear-gradient(90deg,transparent,var(--accent),transparent);
-      opacity:.5;animation:pulse 3s infinite ease-in-out;">
-    </div>
-    <style>
-      @keyframes pulse {{
-        0%,100% {{ opacity:.15; }}
-        50% {{ opacity:.55; }}
-      }}
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+/* ================= Footer ================= */
+footer, .footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.02);
+}
+.footer a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* ================= Focus and accessibility ================= */
+:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) var(--focus-alpha), transparent), 0 8px 26px rgba(0,0,0,0.6);
+  border-radius: 8px;
+}
+.stApp, .stApp * {
+  color-scheme: dark;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
+@media (max-width: 1100px) {
+  .main .block-container { padding-left: 18px; padding-right: 18px; max-width: 980px; }
+  [data-testid="stSidebar"] { min-width: 260px; }
+  .stButton>button { padding: 10px 12px !important; }
+}
+@media (max-width: 820px) {
+  .main .block-container { padding-left: 12px; padding-right: 12px; }
+  [data-testid="stSidebar"] { position: relative; width: 100% !important; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.02); }
+}
+
+/* Small utilities */
+.muted { color: var(--muted) !important; }
+.accent { color: var(--accent) !important; }
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  box-shadow: 0 8px 26px rgba(0,0,0,0.52);
+}
+</style>
+""", unsafe_allow_html=True)
 
 
 # ---------------------- UI helpers -----------------------
